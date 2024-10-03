@@ -1,0 +1,80 @@
+<!-- professionnel.component.html -->
+<div class="container">
+    <h2>Inscription Professionnel</h2>
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <label for="fullName">Nom Complet</label>
+            <input 
+                id="fullName" 
+                type="text" 
+                formControlName="fullName" 
+                class="form-control" 
+                [ngClass]="{'is-invalid': registerForm.get('fullName')?.invalid && registerForm.get('fullName')?.touched}">
+            <div *ngIf="registerForm.get('fullName')?.invalid && registerForm.get('fullName')?.touched" class="invalid-feedback">
+                Nom complet requis.
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input 
+                id="email" 
+                type="email" 
+                formControlName="email" 
+                class="form-control" 
+                [ngClass]="{'is-invalid': registerForm.get('email')?.invalid && registerForm.get('email')?.touched}">
+            <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="invalid-feedback">
+                Email requis et doit être valide.
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Mot de Passe</label>
+            <input 
+                id="password" 
+                type="password" 
+                formControlName="password" 
+                class="form-control" 
+                [ngClass]="{'is-invalid': registerForm.get('password')?.invalid && registerForm.get('password')?.touched}">
+            <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="invalid-feedback">
+                Mot de passe requis (minimum 6 caractères).
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="role">Rôle</label>
+            <select id="role" formControlName="role" class="form-control" [ngClass]="{'is-invalid': registerForm.get('role')?.invalid && registerForm.get('role')?.touched}">
+                <option value="">Sélectionnez un rôle</option>
+                <option value="Enfant">Enfant</option>
+                <option value="Parent">Parent</option>
+                <option value="Professionnel">Professionnel</option>
+                <option value="Admin">Admin</option>
+            </select>
+            <div *ngIf="registerForm.get('role')?.invalid && registerForm.get('role')?.touched" class="invalid-feedback">
+                Rôle requis.
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" [disabled]="registerForm.invalid">S'inscrire</button>
+    </form>
+
+    <hr>
+
+    <h3>Liste des Utilisateurs</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nom Complet</th>
+                <th>Email</th>
+                <th>Rôle</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of users">
+                <td>{{ user.fullName }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.role}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,47 @@
+<div class="container">
+    <h2>Gestion des Vidéos</h2>
+  
+    <!-- Formulaire pour ajouter une nouvelle vidéo -->
+    <form (ngSubmit)="ajouterVideo()" #videoForm="ngForm">
+      <div class="form-group">
+        <label for="duree">Durée:</label>
+        <input type="text" id="duree" [(ngModel)]="newVideo.duree" name="duree" required class="form-control" />
+      </div>
+  
+      <div class="form-group">
+        <label for="description">Description:</label>
+        <textarea id="description" [(ngModel)]="newVideo.description" name="description" required class="form-control"></textarea>
+      </div>
+  
+      <div class="form-group">
+        <label for="metier">Métier:</label>
+        <select id="metier" [(ngModel)]="newVideo.metier" name="metier" class="form-control">
+          <option *ngFor="let metier of metiers" [ngValue]="metier">{{ metier.nom }}</option>
+        </select>
+      </div>
+  
+  
+      <div class="form-group">
+        <label for="fichier">Fichier Vidéo:</label>
+        <input type="file" id="fichier" (change)="onFileSelected($event)" required class="form-control" />
+      </div>
+  
+      <button type="submit" class="btn btn-primary" [disabled]="videoForm.invalid">Ajouter Vidéo</button>
+    </form>
+  
+    <hr />
+  
+    <!-- Liste des vidéos existantes -->
+    <h3>Liste des Vidéos</h3>
+    <div *ngFor="let video of videos" class="video-item">
+      <h4>{{ video.description }} ({{ video.duree }})</h4>
+      <p>Métier: {{ video.metier?.nom }}</p>
+      <video *ngIf="video.url" [src]="'http://localhost:8080/' +video.url" controls width="500">
+        Your browser does not support the video tag.
+      </video>
+     
+      <button (click)="regarderVideo(video.id)" class="btn btn-info">Regarder</button>
+      <button (click)="supprimerVideo(video.id)" class="btn btn-danger">Supprimer</button>
+    </div>
+  </div>
+  

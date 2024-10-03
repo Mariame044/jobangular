@@ -1,0 +1,194 @@
+/* Global Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Layout */
+.login-page {
+    display: flex;
+    max-width: 1200px;
+    width: 100%; /* Prendre toute la largeur de l'écran */
+    padding: 40px 0;
+    overflow: hidden;
+    margin: auto; /* Centrer horizontalement dans le conteneur parent */
+    
+}
+
+/* Left Section (Image and Text) */
+.left-section {
+    background-color: white;
+    border: 1px solid gainsboro;
+    border-radius: 5px; /* Ajout de la bordure : 2px de largeur, style solide, couleur noire */
+    box-shadow: 0 4px 15px gainsboro; /* Ajout de l'ombre */
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 500px;
+    
+}
+
+.left-section img {
+    max-width: 10000%;
+    margin-bottom: 20px;
+}
+
+.left-section h2 {
+    font-size: 24px;
+    color: #000;
+    margin-bottom: 10px;
+}
+
+.left-section p {
+    color: #4A4A4A;
+    font-size: 16px;
+}
+
+/* Right Section (Login Form) */
+.right-section {
+    flex: 1;
+   
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #EDEDFF;
+    min-height: 500px;
+   
+
+}
+
+.login-box {
+    max-width: 400px;
+    width: 100%; /* Prendre toute la largeur disponible */
+    margin: 0 auto; /* Centrer horizontalement */
+}
+
+.login-box h2 {
+    font-size: 22px;
+    color: #4A4A4A;
+    margin-bottom: 10px;
+}
+
+.login-box p {
+    color: #888;
+    margin-bottom: 20px;
+}
+
+.google-login-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    width: 100%;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.google-login-btn img {
+    margin-right: 10px;
+}
+
+.or {
+    text-align: center;
+    color: #999;
+    margin-bottom: 20px;
+}
+
+.login-box label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+}
+
+.login-box input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.forgot-password {
+    color: #8B5CF6;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+.login-btn {
+    width: 100%;
+    background-color: #036A94;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.login-btn:hover {
+    background-color: #7C3AED;
+}
+
+.create-account {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.create-account a {
+    color: #8B5CF6;
+    text-decoration: none;
+}
+
+.create-account a:hover {
+    text-decoration: underline;
+}
+.error-message {
+    color: red; /* Couleur rouge pour le message d'erreur */
+    margin-bottom: 15px; /* Espacement en bas */
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .login-page {
+        flex-direction: column; /* Passer à une colonne pour les petits écrans */
+        max-width: 100%; /* Prendre toute la largeur de l'écran */
+    }
+
+    .left-section,
+    .right-section {
+        padding: 20px; /* Réduire le padding pour les petits écrans */
+    }
+
+    .login-box {
+        max-width: 90%; /* Réduire la largeur du formulaire de connexion */
+        margin: 0 auto; /* S'assurer que le formulaire est toujours centré */
+    }
+}

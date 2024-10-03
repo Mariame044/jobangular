@@ -1,0 +1,38 @@
+<div class="login-page">
+  <!-- Section gauche avec l'image et le texte -->
+  <div class="left-section">
+    <img src="assets/logo.png" alt="Skeleton with laptop">
+    <h2>Bienvenue dans l'univers de Jo Aventure ! 🌟.</h2>
+    <p>Start for free and get attractive offers from the community</p>
+  </div>
+
+  <!-- Section droite avec le formulaire de connexion -->
+  <div class="right-section">
+    <div class="login-box">
+      <h2>Bienvenue sur notre plateforme !</h2> <!-- Mot de bienvenue ajouté -->
+      <p>Connectez-vous à votre compte pour continuer.</p> 
+    
+      
+
+    
+
+      <!-- Formulaire de connexion -->
+      <form (ngSubmit)="login()">
+        <label for="email">Email</label>
+        <input type="email" [(ngModel)]="email" name="email" required placeholder="name@domain.com">
+
+        <label for="password">Password</label>
+        <input type="password" [(ngModel)]="password" name="password" required placeholder="********">
+
+       
+        <!-- Affichage du message d'erreur -->
+        <div *ngIf="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </div>
+        <button type="submit" class="login-btn">Login</button>
+      </form>
+
+    
+    </div>
+  </div>
+</div>

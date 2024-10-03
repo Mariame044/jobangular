@@ -1,0 +1,81 @@
+<div class="categorie-container">
+   
+    <!-- Section pour la recherche et ajouter une catégorie -->
+    <div class="header-section">
+      <p>Liste des Catégories</p>
+  
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Rechercher une catégorie"
+        [(ngModel)]="searchTerm"
+        (input)="loadCategories()"
+      />
+      <button class="btn btn-primary" (click)="openModal('create')">Ajouter</button>
+    </div>
+  
+    <!-- Conteneur de la table avec border-radius -->
+    <div class="table-container">
+      <!-- Table des catégories -->
+      <table class="category-table">
+        <thead>
+          <tr>
+            <th>Numéro</th>
+            <th>Catégorie</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let categorie of categories; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ categorie.nom }}</td>
+            <td>
+                <button class="btn btn-edit" (click)="openModal('edit', categorie)">
+                    <i class="fas fa-edit"></i> 
+                  </button>
+                  <button class="btn btn-delete" (click)="deleteCategorie(categorie.id!)">
+                    <i class="fas fa-trash"></i> 
+                  </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+  
+      <!-- Message si la liste est vide -->
+      <div *ngIf="categories.length === 0" class="empty-message">
+        <p>Aucune catégorie disponible.</p>
+      </div>
+    </div>
+  
+    <!-- Modal pour Ajouter/Modifier une catégorie -->
+    <div class="modal" *ngIf="isModalOpen">
+      <div class="modal-content">
+        <span class="close" (click)="closeModal()">&times;</span>
+  
+        <h3 *ngIf="isEditing; else addingMode">Modifier Catégorie</h3>
+        <ng-template #addingMode>
+          <h3>Ajouter une catégorie</h3>
+        </ng-template>
+  
+        <div class="form-container">
+          <label for="nomCategorie">Libellé</label>
+          <input
+            id="nomCategorie"
+            type="text"
+            [(ngModel)]="modalCategorie.nom"
+            placeholder="Nom de la catégorie"
+          />
+        </div>
+  
+        <button class="btn btn-submit" (click)="isEditing ? updateCategorie() : createCategorie()">
+          {{ isEditing ? 'Mettre à jour' : 'Envoyer' }}
+        </button>
+      </div>
+    </div>
+  
+    <!-- Message d'erreur -->
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+  </div>
+  

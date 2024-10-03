@@ -1,0 +1,77 @@
+<app-login *ngIf="!logIN" (loginEvent)="verifier(true)"></app-login>
+
+<!-- Affiche le composant sidebar et autres contenus si l'utilisateur est connecté -->
+<div *ngIf="logIN">
+<div class="d-flex" id="wrapper">
+  <!-- Sidebar -->
+  <div class="bg-light border-right" id="sidebar-wrapper" [ngClass]="{ 'active': isOpened }">
+    <div class="sidebar-heading text-center">
+      <img src="assets/logo.png" alt="Job Adventure" class="img-fluid" style="max-width: 150px;">
+      <!-- Bouton de fermeture visible uniquement lorsque la sidebar est ouverte -->
+      <button class="close-btn" (click)="closeSidebar()" *ngIf="isOpened" aria-label="Close">
+        <i class="fas fa-times"></i> <!-- Icône de fermeture -->
+      </button>
+    </div>
+    <div class="list-group list-group-flush">
+      <a routerLink="dashboard" class="list-group-item list-group-item-action">
+        <i class="fas fa-tachometer-alt"></i> Dashboard
+      </a>
+      <a routerLink="categorie" class="list-group-item list-group-item-action">
+        <i class="fas fa-th-list"></i> Catégorie
+      </a>
+      <a routerLink="professionnel" class="list-group-item list-group-item-action">
+        <i class="fas fa-users"></i> Utilisateurs
+      </a>
+      <a routerLink="metier" class="list-group-item list-group-item-action">
+        <i class="fas fa-tachometer-alt"></i> Metier
+      </a>
+      <a routerLink="video" class="list-group-item list-group-item-action">
+        <i class="fas fa-video"></i> Vidéo
+      </a>
+      <a routerLink="/interviews" class="list-group-item list-group-item-action">
+        <i class="fas fa-file-alt"></i> Interview
+      </a>
+      <a routerLink="/Jeu de role" class="list-group-item list-group-item-action">
+        <i class="fas fa-gamepad"></i> Jeu de rôle
+      </a>
+      <a routerLink="/professionnel" class="list-group-item list-group-item-action">
+        <i class="fas fa-user"></i> Professionnel
+      </a>
+      <a routerLink="/parametre" class="list-group-item list-group-item-action">
+        <i class="fas fa-cog"></i> Profile
+      </a>
+    </div>
+  </div>
+
+ <!-- Page Content -->
+<div id="page-content-wrapper" class="flex-grow-1">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom fixed-top">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" id="menu-toggle" (click)="toggleSidebar()">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Barre de recherche au milieu -->
+      <div class="mx-auto">
+        <input type="text" class="form-control" placeholder="Search" />
+      </div>
+
+      <div class="ml-auto d-flex align-items-center">
+        <button class="btn btn-link" >
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+        <button class="btn btn-link">
+          <i class="fas fa-user-circle"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <router-outlet></router-outlet>
+    <!-- Main content goes here -->
+  </div>
+</div>
+
+</div>
+</div>

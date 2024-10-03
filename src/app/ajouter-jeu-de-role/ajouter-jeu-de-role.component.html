@@ -1,0 +1,30 @@
+<form [formGroup]="jeuForm" (ngSubmit)="onSubmit()">
+    <label for="nom">Nom:</label>
+    <input id="nom" formControlName="nom" required>
+  
+    <label for="description">Description:</label>
+    <input id="description" formControlName="description" required>
+  
+    <label for="metierId">ID Métier:</label>
+    <input id="metierId" formControlName="metierId" required>
+  
+    <label for="image">Image:</label>
+    <input type="file" id="image" (change)="onFileChange($event)" required>
+  
+    <h3>Questions:</h3>
+    <div formArrayName="questions" *ngFor="let question of questions.controls; let i = index">
+      <div [formGroupName]="i">
+        <label for="texte">Texte de la question:</label>
+        <input formControlName="texte" required>
+        
+        <label for="choix">Choix (séparés par des virgules):</label>
+        <input formControlName="choix" required>
+        
+        <label for="reponseCorrecte">Réponse correcte:</label>
+        <input formControlName="reponseCorrecte" required>
+      </div>
+    </div>
+    <button type="button" (click)="addQuestion()">Ajouter une question</button>
+    <button type="submit">Ajouter le jeu de rôle</button>
+  </form>
+  
