@@ -1,16 +1,15 @@
-<!-- professionnel.component.html -->
 <div class="container">
     <h2>Inscription Professionnel</h2>
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
         <div class="form-group">
-            <label for="fullName">Nom Complet</label>
+            <label for="nom">Nom Complet</label>
             <input 
-                id="fullName" 
+                id="nom" 
                 type="text" 
-                formControlName="fullName" 
+                formControlName="nom" 
                 class="form-control" 
-                [ngClass]="{'is-invalid': registerForm.get('fullName')?.invalid && registerForm.get('fullName')?.touched}">
-            <div *ngIf="registerForm.get('fullName')?.invalid && registerForm.get('fullName')?.touched" class="invalid-feedback">
+                [ngClass]="{'is-invalid': registerForm.get('nom')?.invalid && registerForm.get('nom')?.touched}">
+            <div *ngIf="registerForm.get('nom')?.invalid && registerForm.get('nom')?.touched" class="invalid-feedback">
                 Nom complet requis.
             </div>
         </div>
@@ -45,10 +44,7 @@
             <label for="role">Rôle</label>
             <select id="role" formControlName="role" class="form-control" [ngClass]="{'is-invalid': registerForm.get('role')?.invalid && registerForm.get('role')?.touched}">
                 <option value="">Sélectionnez un rôle</option>
-                <option value="Enfant">Enfant</option>
-                <option value="Parent">Parent</option>
-                <option value="Professionnel">Professionnel</option>
-                <option value="Admin">Admin</option>
+                <option *ngFor="let r of roles" [value]="r.nom">{{ r.nom }}</option>
             </select>
             <div *ngIf="registerForm.get('role')?.invalid && registerForm.get('role')?.touched" class="invalid-feedback">
                 Rôle requis.
@@ -71,10 +67,30 @@
         </thead>
         <tbody>
             <tr *ngFor="let user of users">
-                <td>{{ user.fullName }}</td>
+                <td>{{ user.nom }}</td>
                 <td>{{ user.email }}</td>
-                <td>{{ user.role}}</td>
+                <td>{{ user.role.nom }}</td>
             </tr>
         </tbody>
     </table>
+
+    <!-- Modal -->
+    <div id="successModal" class="modal" tabindex="-1" role="dialog" [ngClass]="{'show': isModalOpen}" *ngIf="isModalOpen">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Inscription Réussie</h5>
+                    <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>L'utilisateur a été inscrit avec succès !</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeModal()">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

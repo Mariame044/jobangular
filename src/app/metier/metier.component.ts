@@ -5,7 +5,7 @@ import { Metier } from '../models/metier';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Categorie } from '../models/categorie';
-import { SafeUrl } from '@angular/platform-browser';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-metier',
@@ -19,19 +19,30 @@ export class MetierComponent implements OnInit {
   newMetier: Metier = { id: 0, nom: '', description: '', imageUrl: '', categorie: null };
   imageFile: File | null = null;
   categories: Categorie[] = [];
-  loading: boolean = false; // Ajout de la variable de chargement
-  errorMessage: string | null = null; // Ajout pour stocker les messages d'erreur
-  image: SafeUrl | null = null; // URL sécurisée pour afficher l'image
-  sanitizer: any;
-
-
+  loading: boolean = false; // Indique si une opération est en cours
+  errorMessage: string | null = null; // Message d'erreur éventuel
+  searchTerm: string = '';
+  private unsubscribe$ = new Subject<void>();
   constructor(private metierService: MetierService) {}
 
   ngOnInit(): void {
     this.getAllMetiers();
     this.getAllCategories();
-    this.getImage('example.jpg');
-      // Vous pouvez charger une image par défaut
+    this.loadMetiers();// Récupérez les métiers lors de l'initialisation
+  }
+  loadMetiers() {
+    this.metierService.getAllMetiers()
+      .pipe(takeUntil(this.unsubscribe$)) // Désabonnement lors de la destruction du composant
+      .subscribe({
+        next: (metier) => {
+          this.metiers = this.searchTerm ? metier.filter(metier =>
+            metier.description.toLowerCase().includes(this.searchTerm.toLowerCase())
+          ) : metier; // Filtrer si un terme de recherche existe
+        },
+        error: () => {
+          this.errorMessage = 'Erreur lors du chargement des catégories';
+        }
+      });
   }
 
   getAllMetiers(): void {
@@ -44,14 +55,7 @@ export class MetierComponent implements OnInit {
       }
     );
   }
-  getImage(filename: string): void {
-    this.metierService.getImage(filename).subscribe((blob: Blob) => {
-      const objectURL = URL.createObjectURL(blob);
-      this.image = this.sanitizer.bypassSecurityTrustUrl(objectURL);  // Sécuriser l'URL de l'image
-    }, error => {
-      console.error('Erreur lors du chargement de l\'image :', error);
-    });
-  }
+
   getAllCategories(): void {
     this.metierService.getAllCategories().subscribe(
       (data) => {
@@ -81,14 +85,15 @@ export class MetierComponent implements OnInit {
       this.metierService.creerMetier(formData).subscribe(
         (response: Metier) => {
           this.loading = false; // Arrêter le chargement
-          console.log('Image uploaded successfully', response);
+          console.log('Métier créé avec succès', response);
           this.metiers.push(response);
           this.resetForm();
+          this.closeModal(); // Fermer le modal après l'ajout
         },
         (error: HttpErrorResponse) => {
           this.loading = false; // Arrêter le chargement
-          console.error('Erreur lors de l\'upload de l\'image', error);
-          this.errorMessage = 'Échec du téléchargement de l\'image. Veuillez réessayer.'; // Mettre à jour le message d'erreur
+          console.error('Erreur lors de l\'ajout du métier', error);
+          this.errorMessage = 'Échec de l\'ajout du métier. Veuillez réessayer.'; // Mettre à jour le message d'erreur
         }
       );
     } else {
@@ -110,5 +115,22 @@ export class MetierComponent implements OnInit {
         console.error('Erreur lors de la suppression du métier', error);
       }
     );
+  }
+
+  openModal(): void {
+    this.resetForm(); // Réinitialiser pour un nouveau métier
+    const modal = document.getElementById('metierModal');
+    if (modal) {
+      modal.classList.add('show');
+      modal.style.display = 'block';
+    }
+  }
+
+  closeModal(): void {
+    const modal = document.getElementById('metierModal');
+    if (modal) {
+      modal.classList.remove('show');
+      modal.style.display = 'none';
+    }
   }
 }

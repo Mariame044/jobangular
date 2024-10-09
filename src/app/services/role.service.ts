@@ -8,7 +8,7 @@ import { AuthenticationService } from './authentication.service';
   providedIn: 'root'
 })
 export class RoleService {
-  private baseUrl = 'http://localhost:8080/api/admins/roles'; // Remplacez par l'URL de votre API
+  private baseUrl = 'http://localhost:8080/api/admins/listerole'; // Remplacez par l'URL de votre API
 
   constructor(private http: HttpClient, private authService: AuthenticationService) {}
 
@@ -20,7 +20,7 @@ export class RoleService {
     });
   }
 
-  getAllRoles(): Observable<Role[]> {
+  getRoles(): Observable<Role[]> {
     return this.http.get<Role[]>(this.baseUrl , { headers: this.getHeaders() });
   }
 }

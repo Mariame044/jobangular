@@ -1,0 +1,100 @@
+<div class="categorie-container">
+    <div class="header-section">
+        <p>Liste des Métiers</p>
+        <input
+            type="text"
+            class="search-input"
+            placeholder="Rechercher un métier"
+            [(ngModel)]="searchTerm"
+            (input)="loadjeuderole()"
+        />
+        <button (click)="openModal()" class="btn btn-primary">Ajouter Métier</button>
+    </div>
+
+    <div class="table-container">
+        <table class="category-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Description</th>
+                    <th>Métier</th>
+                    <th>Image</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let jeuderole of jeuxderole">
+                    <td>{{ jeuderole.id }}</td>
+                    <td>{{ jeuderole.nom }}</td>
+                    <td>{{ jeuderole.description }}</td>
+                    <td>{{ jeuderole.metier?.nom }}</td>
+                    <td>
+                        <img [src]="'http://localhost:8080/' + jeuderole.imageUrl" alt="{{ jeuderole.nom }}" width="200" />
+                    </td>
+                    <td>
+                        <button class="btn btn-delete" (click)="supprimerJeuDeRole(jeuderole.id!)">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div *ngIf="metiers.length === 0" class="empty-message">
+            <p>Aucun métier disponible.</p>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="metierModal" class="modal" tabindex="-1" role="dialog" style="display: none;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ajouter un Métier</h5>
+                    <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="form-container">
+                    <form (ngSubmit)="createjeuderole()">
+                        <div class="form-group">
+                            <label for="nom">Nom du Métier:</label>
+                            <input type="text" id="nom" [(ngModel)]="newJeuderole.nom" name="nom" required class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Description:</label>
+                            <textarea id="description" [(ngModel)]="newJeuderole.description" name="description" required class="form-control"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="metier">Métier:</label>
+                            <select id="metier" [(ngModel)]="newJeuderole.metier" name="metier" required class="form-control">
+                                <option value="" disabled selected>Choisissez un métier</option>
+                                <option *ngFor="let metier of metiers" [ngValue]="metier">
+                                    {{ metier.nom }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="file">Sélectionner une image:</label>
+                            <input type="file" (change)="onImageChange($event)" class="form-control" required />
+                        </div>
+
+                        <div *ngIf="loading" class="loading-message">
+                            <p>Chargement en cours...</p>
+                        </div>
+
+                        <div *ngIf="errorMessage" class="error-message text-danger">
+                            <p>{{ errorMessage }}</p>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Ajouter Jeu de Rôle</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

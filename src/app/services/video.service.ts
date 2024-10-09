@@ -43,7 +43,7 @@ export class VideoService {
     return this.http.get<Video>(`${this.baseUrl}/${id}`, { headers: this.getHeaders() });
   }
 
-  updateVideo(id: number, video: Video): Observable<Video> {
+  updateVideo(id: number, video: FormData): Observable<Video> {
     return this.http.put<Video>(`${this.baseUrl}/${id}`, video, { headers: this.getHeaders() });
   }
 

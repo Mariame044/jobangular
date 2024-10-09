@@ -5,6 +5,7 @@ import { Video } from '../models/video';
 import { Metier } from '../models/metier'; // Importez le modèle Metier
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; // Importez les modules nécessaires
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-video',
@@ -18,15 +19,38 @@ export class VideoComponent implements OnInit {
   newVideo: Video = { id: 0, duree: '', description: '', url: '', metier: null }; // Ajoutez le champ pour le métier
   selectedFile: File | null = null;
   metiers: Metier[] = [];
+  isModalOpen: boolean = false; // Indique si le modal est ouvert
+  isEditing: boolean = false; // Indique si nous sommes en mode édition
+  modalVideo: Video = { id: 0, duree: '', description: '', url: '', metier: null }; // Vidéo pour le modal
+  private unsubscribe$ = new Subject<void>();
+  errorMessage: string = '';
+  searchTerm: string = '';
   constructor(
     private videoService: VideoService,
     private metierService: MetierService // Injectez le service Metier
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.obtenirToutesLesVideos();
     this.getAllMetiers(); // Récupérez les métiers lors de l'initialisation
+    this.loadVideo();// Récupérez les métiers lors de l'initialisation
   }
+  loadVideo() {
+    this.videoService.obtenirToutesLesVideos()
+      .pipe(takeUntil(this.unsubscribe$)) // Désabonnement lors de la destruction du composant
+      .subscribe({
+        next: (video) => {
+          this.videos = this.searchTerm ? video.filter(video =>
+            video.description.toLowerCase().includes(this.searchTerm.toLowerCase())
+          ) : video; // Filtrer si un terme de recherche existe
+        },
+        error: () => {
+          this.errorMessage = 'Erreur lors du chargement des catégories';
+        }
+      });
+  }
+
+
 
   obtenirToutesLesVideos() {
     this.videoService.obtenirToutesLesVideos().subscribe(videos => {
@@ -34,7 +58,6 @@ export class VideoComponent implements OnInit {
     });
   }
 
- 
   getAllMetiers(): void {
     this.metierService.getAllMetiers().subscribe(
       (data) => {
@@ -45,19 +68,49 @@ export class VideoComponent implements OnInit {
       }
     );
   }
-  ajouterVideo() {
-    const formData = new FormData();
-    formData.append('fichier', this.selectedFile as Blob);
-    formData.append('duree', this.newVideo.duree);
-    formData.append('description', this.newVideo.description);
-    // Assurez-vous de passer l'ID du métier sélectionné
-    formData.append('metierId', this.newVideo.metier?.id.toString() || ''); // Convertir en chaîne
 
-    this.videoService. addVideo(formData).subscribe(video => {
-      this.videos.push(video);
-      this.newVideo = { id: 0, duree: '', description: '', url: '', metier: null }; // Réinitialisez le modèle de vidéo
-      this.selectedFile = null;
-    });
+  openModal(mode: 'create' | 'edit', video?: Video) {
+    this.isModalOpen = true;
+    this.isEditing = mode === 'edit';
+
+    if (this.isEditing && video) {
+      this.modalVideo = { ...video }; // Remplissez le modal avec les données de la vidéo à éditer
+    } else {
+      this.modalVideo = { id: 0, duree: '', description: '', url: '', metier: null }; // Réinitialiser pour la création
+    }
+  }
+
+  closeModal() {
+    this.isModalOpen = false;
+    this.modalVideo = { id: 0, duree: '', description: '', url: '', metier: null }; // Réinitialiser le formulaire modal lors de la fermeture
+    this.selectedFile = null; // Réinitialiser le fichier sélectionné
+  }
+
+  ajouterOuModifierVideo() {
+    const formData = new FormData();
+    
+    if (this.selectedFile) {
+      formData.append('fichier', this.selectedFile as Blob);
+    }
+
+    formData.append('duree', this.modalVideo.duree);
+    formData.append('description', this.modalVideo.description);
+    formData.append('metierId', this.modalVideo.metier?.id.toString() || ''); // Convertir en chaîne
+
+    if (this.isEditing) {
+      this.videoService.updateVideo(this.modalVideo.id, formData).subscribe(video => {
+        const index = this.videos.findIndex(v => v.id === video.id);
+        if (index !== -1) {
+          this.videos[index] = video; // Met à jour la vidéo existante
+        }
+        this.closeModal(); // Ferme le modal
+      });
+    } else {
+      this.videoService.addVideo(formData).subscribe(video => {
+        this.videos.push(video);
+        this.closeModal(); // Ferme le modal après l'ajout
+      });
+    }
   }
 
   onFileSelected(event: any) {
@@ -65,8 +118,7 @@ export class VideoComponent implements OnInit {
   }
 
   supprimerVideo(id: number) {
-    this.videoService.
-  deleteVideo(id).subscribe(() => {
+    this.videoService.deleteVideo(id).subscribe(() => {
       this.videos = this.videos.filter(video => video.id !== id);
     });
   }

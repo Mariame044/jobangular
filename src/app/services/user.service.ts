@@ -3,14 +3,15 @@ import { AuthenticationService } from './authentication.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
-import { LoginUserDto, User } from '../models/user';
+import { LoginUserDto, Role, User } from '../models/user';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  private baseUrl = 'http://localhost:8080/api/admins'; // URL de base pour les professionnels
+  private baseUrl = 'http://localhost:8080/api/admins';
+  private baseUrl1 = 'http://localhost:8080/api/admins/listerole'; // URL de base pour les professionnels
 
   constructor(private http: HttpClient, private authService: AuthenticationService) {}
 
@@ -29,7 +30,9 @@ export class UserService {
 getAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${this. baseUrl}/users`, { headers: this.getHeaders() });
 }
-
+getRoles(): Observable<Role[]> {
+  return this.http.get<Role[]>(this.baseUrl1 , { headers: this.getHeaders() });
+}
 
 
   // Autres méthodes pour gérer les professionnels...

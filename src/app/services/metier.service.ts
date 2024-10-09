@@ -55,6 +55,10 @@ export class MetierService {
   creerMetier(formData: FormData): Observable<Metier> {
     return this.http.post<Metier>(this.apiUrl, formData, { headers: this.getHeaders(true) });
   }
+  updateMetier(formData: FormData): Observable<Metier> {
+    return this.http.post<Metier>(this.apiUrl, formData, { headers: this.getHeaders(true) });
+  }
+  
   
 
   getAllCategories(): Observable<Categorie[]> {

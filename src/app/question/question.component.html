@@ -1,0 +1,67 @@
+<div>
+    <h1>Gestion des Questions</h1>
+  
+    <!-- Bouton pour ouvrir le modal -->
+    <button type="button" class="btn btn-primary" (click)="openModal()">
+      Ajouter une Question
+    </button>
+  
+    <!-- Modal -->
+    <div class="modal fade" id="ajouterQuestionModal" tabindex="-1" aria-labelledby="ajouterQuestionModalLabel" aria-hidden="true" [ngClass]="{'show': isModalOpen}" style="display: {{isModalOpen ? 'block' : 'none'}}">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="ajouterQuestionModalLabel">Ajouter une Question</h5>
+            <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form (ngSubmit)="ajouterQuestion()">
+              <div>
+                <label for="texte">Texte de la question:</label>
+                <input type="text" id="texte" [(ngModel)]="newQuestion.texte" name="texte" required>
+              </div>
+  
+              <div>
+                <label for="point">Points:</label>
+                <input type="number" id="point" [(ngModel)]="newQuestion.point" name="point" required>
+              </div>
+  
+              <div>
+                <label for="typeQuestion">Type de question:</label>
+                <select id="typeQuestion" [(ngModel)]="newQuestion.typeQuestion" name="typeQuestion" required>
+                  <option *ngFor="let type of types" [value]="type">{{type}}</option>
+                </select>
+              </div>
+  
+              <div *ngIf="newQuestion.typeQuestion === 'JEU_DE_ROLE'">
+                <label for="jeuDeRole">Sélectionner un jeu de rôle:</label>
+                <select id="jeuDeRole" [(ngModel)]="selectedJeuDeRoleId" name="jeuDeRole" required>
+                  <option *ngFor="let jeu of jeuxDeRole" [value]="jeu.id">{{jeu.nom}}</option>
+                </select>
+              </div>
+  
+              <h3>Ajouter une Réponse</h3>
+              <div>
+                <label for="reponse">Réponse :</label>
+                <select id="reponse" [(ngModel)]="newQuestion.reponseId" name="reponse" required>
+                  <option *ngFor="let reponse of reponses" [value]="reponse.id">{{ reponse.reponsepossible }}</option>
+                </select>
+              </div>
+  
+              <button type="submit" [disabled]="loading">Ajouter Question avec Réponse</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+  
+    <ul>
+      <li *ngFor="let question of questions">
+        {{ question.texte }} ({{ question.point }} points) 
+        <button (click)="supprimerQuestion(question.id!)">Supprimer</button>
+      </li>
+    </ul>
+  </div>
+  

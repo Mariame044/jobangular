@@ -1,67 +1,109 @@
-<div class="container">
-  <h2>Gestion des Métiers</h2>
+<div class="categorie-container">
+ 
+ <div class="header-section">
+  <p>Liste des Metiers</p>
 
-  <form (ngSubmit)="createMetier()" #metierForm="ngForm">
-    <div class="form-group">
-      <label for="nom">Nom du Métier:</label>
-      <input type="text" id="nom" [(ngModel)]="newMetier.nom" name="nom" required class="form-control" />
-    </div>
-    
-    <div class="form-group">
-      <label for="description">Description:</label>
-      <textarea id="description" [(ngModel)]="newMetier.description" name="description" required class="form-control"></textarea>
-    </div>
-    <div class="form-group">
-      <label for="categorie">Catégorie:</label>
-      <select
-        id="categorie"
-        [(ngModel)]="newMetier.categorie"
-        name="categorie"
-        required
-        class="form-control"
-      >
-        <option value="" disabled selected>Choisissez une catégorie</option>
-        <option *ngFor="let categorie of categories" [ngValue]="categorie"> <!-- Utilisez ngValue pour l'objet -->
-          {{ categorie.nom }}
-        </option>
-      </select>
-    </div>
-    <div>
-      <label for="file">Select a video:</label>
-      <input type="file" (change)="onImageChange($event)">
-    </div>
+  <input
+    type="text"
+    class="search-input"
+    placeholder="Rechercher une catégorie"
+    [(ngModel)]="searchTerm"
+    (input)="loadMetiers()"
+  />
+  <button (click)="openModal()" class="btn btn-primary">Ajouter Métier</button>
+</div>
+ 
+  
 
-    <button type="submit" class="btn btn-primary">Ajouter Métier</button>
-  </form>
-
-  <hr />
-
-  <h3>Liste des Métiers</h3>
-  <table class="table table-bordered">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nom</th>
-        <th>Description</th>
-      
-        <th>categorie</th>
+  
+  <div class="table-container">
+    <table class="category-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nom</th>
+          <th>Description</th>
+          <th>Catégorie</th>
           <th>Image</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let metier of metiers">
-        <td>{{ metier.id }}</td>
-        <td>{{ metier.nom }}</td>
-        <td>{{ metier.description }}</td>
-        <td>{{ metier.categorie?.nom }}</td> <!-- Access the category name directly -->
-        <td>
-          <img *ngIf="metier.imageUrl" [src]="'http://localhost:8080/' + metier.imageUrl" alt="Image du métier" width="1500">
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let metier of metiers">
+          <td>{{ metier.id }}</td>
+          <td>{{ metier.nom }}</td>
+          <td>{{ metier.description }}</td>
+          <td>{{ metier.categorie?.nom }}</td>
+          <td>
+            <img [src]="'http://localhost:8080/' + metier.imageUrl" alt="{{ metier.nom }}" width="200" />
+          </td>
+          <td>
+            <!-- <button class="btn btn-edit" (click)="openModal('edit', categorie)">
+                <i class="fas fa-edit"></i> 
+              </button> -->
+              <button class="btn btn-delete" (click)="deleteMetier(metier.id!)">
+                <i class="fas fa-trash"></i> 
+              </button>
         </td>
-        <td>
-          <button (click)="deleteMetier(metier.id)" class="btn btn-danger">Supprimer</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+         
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="metiers.length === 0" class="empty-message">
+      <p>Aucun métier disponible.</p>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="metierModal" class="modal" tabindex="-1" role="dialog" style="display: none;">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Ajouter un Métier</h5>
+          <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+            <span>&times;</span>
+          </button>
+        </div>
+        <div class="form-container">
+          <form (ngSubmit)="createMetier()">
+            <div class="form-group">
+              <label for="nom">Nom du Métier:</label>
+              <input type="text" id="nom" [(ngModel)]="newMetier.nom" name="nom" required class="form-control" />
+            </div>
+
+            <div class="form-group">
+              <label for="description">Description:</label>
+              <textarea id="description" [(ngModel)]="newMetier.description" name="description" required class="form-control"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="categorie">Catégorie:</label>
+              <select id="categorie" [(ngModel)]="newMetier.categorie" name="categorie" required class="form-control">
+                <option value="" disabled selected>Choisissez une catégorie</option>
+                <option *ngFor="let categorie of categories" [ngValue]="categorie">
+                  {{ categorie.nom }}
+                </option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="file">Sélectionner une image:</label>
+              <input type="file" (change)="onImageChange($event)" class="form-control" required />
+            </div>
+
+            <div *ngIf="loading" class="loading-message">
+              <p>Chargement en cours...</p>
+            </div>
+            
+            <div *ngIf="errorMessage" class="error-message text-danger">
+              <p>{{ errorMessage }}</p>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Ajouter Métier</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
