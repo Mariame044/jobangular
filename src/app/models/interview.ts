@@ -1,3 +1,4 @@
+import { Trancheage } from "./video";
 
 export interface Metier {
     id: number;
@@ -9,8 +10,10 @@ export interface Metier {
       date:Date;
       duree: string;
       description: string;
+      titre: string;
       url: string; // URL de la vidéo
       metier: Metier | null; // Doit être de type Metier ou null
+      trancheage: Trancheage | null; // Doit être de type Metier ou null
       nombreDeVues?: number; // Ajoutez d'autres propriétés selon vos besoins
     }
     

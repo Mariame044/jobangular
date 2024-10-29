@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { VideoService } from '../services/video.service';
 import { MetierService } from '../services/metier.service'; // Importez le service Metier
-import { Video } from '../models/video';
+import { Trancheage, Video } from '../models/video';
 import { Metier } from '../models/metier'; // Importez le modèle Metier
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; // Importez les modules nécessaires
@@ -16,12 +16,13 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class VideoComponent implements OnInit {
   videos: Video[] = [];
-  newVideo: Video = { id: 0, duree: '', description: '', url: '', metier: null }; // Ajoutez le champ pour le métier
+  newVideo: Video = { id: 0, duree: '', description: '',titre: '', url: '', metier: null , trancheage: null}; // Ajoutez le champ pour le métier
   selectedFile: File | null = null;
   metiers: Metier[] = [];
+  trancheages: Trancheage[] = [];
   isModalOpen: boolean = false; // Indique si le modal est ouvert
   isEditing: boolean = false; // Indique si nous sommes en mode édition
-  modalVideo: Video = { id: 0, duree: '', description: '', url: '', metier: null }; // Vidéo pour le modal
+  modalVideo: Video = { id: 0, duree: '', description: '',titre: '', url: '', metier: null, trancheage: null }; // Vidéo pour le modal
   private unsubscribe$ = new Subject<void>();
   errorMessage: string = '';
   searchTerm: string = '';
@@ -33,6 +34,7 @@ export class VideoComponent implements OnInit {
   ngOnInit(): void {
     this.obtenirToutesLesVideos();
     this.getAllMetiers(); // Récupérez les métiers lors de l'initialisation
+    this.getAllTrancheage(); // Récupérez les métiers lors de l'initialisation
     this.loadVideo();// Récupérez les métiers lors de l'initialisation
   }
   loadVideo() {
@@ -69,6 +71,17 @@ export class VideoComponent implements OnInit {
     );
   }
 
+  getAllTrancheage(): void {
+    this.videoService.getAllTranchesAge().subscribe(
+      (data) => {
+        this.trancheages = data;
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des métiers', error);
+      }
+    );
+  }
+
   openModal(mode: 'create' | 'edit', video?: Video) {
     this.isModalOpen = true;
     this.isEditing = mode === 'edit';
@@ -76,13 +89,13 @@ export class VideoComponent implements OnInit {
     if (this.isEditing && video) {
       this.modalVideo = { ...video }; // Remplissez le modal avec les données de la vidéo à éditer
     } else {
-      this.modalVideo = { id: 0, duree: '', description: '', url: '', metier: null }; // Réinitialiser pour la création
+      this.modalVideo = { id: 0, duree: '', description: '',titre: '', url: '', metier: null , trancheage: null}; // Réinitialiser pour la création
     }
   }
 
   closeModal() {
     this.isModalOpen = false;
-    this.modalVideo = { id: 0, duree: '', description: '', url: '', metier: null }; // Réinitialiser le formulaire modal lors de la fermeture
+    this.modalVideo = { id: 0, duree: '', description: '',titre: '', url: '', metier: null , trancheage: null}; // Réinitialiser le formulaire modal lors de la fermeture
     this.selectedFile = null; // Réinitialiser le fichier sélectionné
   }
 
@@ -95,7 +108,8 @@ export class VideoComponent implements OnInit {
 
     formData.append('duree', this.modalVideo.duree);
     formData.append('description', this.modalVideo.description);
-    formData.append('metierId', this.modalVideo.metier?.id.toString() || ''); // Convertir en chaîne
+    formData.append('metierId', this.modalVideo.metier?.id.toString() || '');
+    formData.append('trancheageId', this.modalVideo.trancheage?.id.toString() || '');  // Convertir en chaîne
 
     if (this.isEditing) {
       this.videoService.updateVideo(this.modalVideo.id, formData).subscribe(video => {

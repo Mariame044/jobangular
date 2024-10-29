@@ -3,9 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { QuestionService } from '../services/question.service';
 import { JeuderoleService } from '../services/jeuderole.service';
-import { Jeuderole, Question, Reponse, TypeQuestion } from '../models/jeuderole';
+import { Jeuderole, Question, Quiz, Reponse, TypeQuestion } from '../models/jeuderole';
 import { Subject, takeUntil } from 'rxjs';
 import { ReponseService } from '../services/reponse.service';
+import { QuizService } from '../services/quiz.service';
+import { Trancheage } from '../models/video';
+import { VideoService } from '../services/video.service';
 
 @Component({
   selector: 'app-question',
@@ -16,11 +19,14 @@ import { ReponseService } from '../services/reponse.service';
 })
 export class QuestionComponent implements OnInit, OnDestroy {
   questions: Question[] = [];
-  newQuestion: Question = { point: 0, texte: '', typeQuestion: TypeQuestion.QUIZ };
+  newQuestion: Question = { point: 0, texte: '', typeQuestion: TypeQuestion.Quiz };
   reponses: Reponse[] = [];  // Stocker les réponses disponibles
   types = Object.values(TypeQuestion);
   jeuxDeRole: Jeuderole[] = [];  // Liste des jeux de rôle disponibles
+  quiz: Quiz[] = [];  // Liste des jeux de rôle disponibles
   selectedJeuDeRoleId: number | null = null; // ID du jeu de rôle sélectionné
+ 
+  selectedQuizId: number | null = null; // ID du jeu de rôle sélectionné
   errorMessage: string | null = null;
   loading = false;
   isModalOpen = false; // État d'ouverture du modal
@@ -29,15 +35,19 @@ export class QuestionComponent implements OnInit, OnDestroy {
   constructor(
     private questionService: QuestionService,
     private reponseService: ReponseService,
-    private jeuderoleService: JeuderoleService
+    private jeuderoleService: JeuderoleService,
+    private quizService: QuizService,
+    private videoService: VideoService
   ) {}
 
   ngOnInit(): void {
     this.loadReponses();
     this.loadQuestions();
     this.loadJeuxDeRole();
+    this.loadQuiz();
+    
   }
-
+ 
   loadReponses(): void {
     this.reponseService.getAllReponses()
       .pipe(takeUntil(this.unsubscribe$))
@@ -76,17 +86,29 @@ export class QuestionComponent implements OnInit, OnDestroy {
         }
       });
   }
-
+  loadQuiz(): void {
+    this.quizService.getAllQuizzes()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (data) => {
+          this.quiz = data;
+        },
+        error: () => {
+          this.errorMessage = 'Erreur lors du chargement des jeux de rôle';
+        }
+      });
+  }
   ajouterQuestion(): void {
     if (this.newQuestion.texte && this.newQuestion.point) {
-      if (this.newQuestion.typeQuestion === TypeQuestion.QUIZ) {
-        this.newQuestion.quizId = 1; // Ajustez cet ID selon vos besoins
+      
+      if (this.newQuestion.typeQuestion === TypeQuestion.Quiz) {
+        this.newQuestion.quizId = this.selectedQuizId; // Ajustez cet ID selon vos besoins
       } else if (this.newQuestion.typeQuestion === TypeQuestion.JEU_DE_ROLE) {
         this.newQuestion.jeuDeRoleId = this.selectedJeuDeRoleId; // ID sélectionné du jeu de rôle
       }
-
+  
       this.loading = true;
-
+  
       this.questionService.ajouterQuestion(this.newQuestion).subscribe({
         next: (response) => {
           this.questions.push(response);
@@ -103,6 +125,7 @@ export class QuestionComponent implements OnInit, OnDestroy {
       this.errorMessage = 'Veuillez remplir tous les champs requis.';
     }
   }
+  
 
   supprimerQuestion(id: number): void {
     this.questionService.supprimerQuestion(id).subscribe({
@@ -116,7 +139,7 @@ export class QuestionComponent implements OnInit, OnDestroy {
   }
 
   resetForm(): void {
-    this.newQuestion = { point: 0, texte: '', typeQuestion: TypeQuestion.QUIZ };
+    this.newQuestion = { point: 0, texte: '', typeQuestion: TypeQuestion.Quiz };
     this.selectedJeuDeRoleId = null; // Réinitialiser l'ID du jeu de rôle sélectionné
   }
 

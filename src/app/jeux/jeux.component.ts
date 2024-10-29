@@ -6,6 +6,8 @@ import { JeuderoleService } from '../services/jeuderole.service';
 import { MetierService } from '../services/metier.service';
 import { Subject, takeUntil } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Trancheage } from '../models/video';
+import { VideoService } from '../services/video.service';
 
 @Component({
   selector: 'app-jeux',
@@ -16,10 +18,12 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class JeuxComponent implements OnInit, OnDestroy {
   jeuxderole: Jeuderole[] = [];
-  newJeuderole: Jeuderole = { id: 0, description: '', nom: '', imageUrl: '', metier: null };
+  newJeuderole: Jeuderole = { id: 0, description: '', nom: '', imageUrl: '', audioUrl: '', metier: null , trancheage: null};
   imageFile: File | null = null;
-  metiers: Metier[] = [];
+  audioFile: File | null = null;
 
+  metiers: Metier[] = [];
+  trancheages: Trancheage[] = [];
   searchTerm: string = '';
   isEditing: boolean = false;
   loading: boolean = false;
@@ -28,11 +32,13 @@ export class JeuxComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
 
   constructor(
+    private videoService: VideoService,
     private jeuderoleService: JeuderoleService,
     private metierService: MetierService
   ) {}
 
   ngOnInit(): void {
+    this.getAllTrancheage(); // Récupérez les métiers lors de l'initialisation
     this.obtenirToutesLesjeuderoles();
     this.getAllMetiers();
   }
@@ -63,7 +69,16 @@ export class JeuxComponent implements OnInit, OnDestroy {
       }
     );
   }
-
+  getAllTrancheage(): void {
+    this.videoService.getAllTranchesAge().subscribe(
+      (data) => {
+        this.trancheages = data;
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des métiers', error);
+      }
+    );
+  }
   getAllMetiers(): void {
     this.metierService.getAllMetiers().subscribe(
       (data) => {
@@ -78,14 +93,19 @@ export class JeuxComponent implements OnInit, OnDestroy {
   onImageChange(event: any): void {
     this.imageFile = event.target.files[0];
   }
-
+  onAudioChange(event: any): void {
+    this.audioFile = event.target.files[0];
+  }
+  
   createjeuderole(): void {
-    if (this.newJeuderole.nom && this.newJeuderole.description && this.imageFile && this.newJeuderole.metier) {
+    if (this.newJeuderole.nom && this.newJeuderole.description && this.imageFile && this.audioFile &&this.newJeuderole.metier && this.newJeuderole.trancheage) {
       const formData = new FormData();
       formData.append('image', this.imageFile);
+      formData.append('audio', this.audioFile);
       formData.append('nom', this.newJeuderole.nom);
       formData.append('description', this.newJeuderole.description);
       formData.append('metierId', String(this.newJeuderole.metier.id));
+      formData.append('trancheageId', String(this.newJeuderole.trancheage.id));
 
       this.loading = true;
       this.errorMessage = null;
@@ -109,7 +129,7 @@ export class JeuxComponent implements OnInit, OnDestroy {
   }
 
   resetForm(): void {
-    this.newJeuderole = { id: 0, nom: '', description: '', imageUrl: '', metier: null };
+    this.newJeuderole = { id: 0, nom: '', description: '', imageUrl: '',audioUrl: '', metier: null , trancheage: null};
     this.imageFile = null;
   }
 

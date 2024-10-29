@@ -1,0 +1,85 @@
+<div class="container mt-4">
+    <h2>Gestion des Quizzes</h2>
+
+    <!-- Bouton pour ouvrir le modal d'ajout -->
+    <button class="btn btn-primary mb-3" (click)="openModal()">Ajouter un Quiz</button>
+
+    <!-- Liste des quizzes -->
+    <div *ngIf="quizzes.length > 0; else noQuizzes">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Titre</th>
+                    <th>Description</th>
+                    <th>Score</th>
+                    <th>Métier</th>
+                    <th>Tranche age</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let quiz of quizzes">
+                    <td>{{ quiz.titre }}</td>
+                    <td>{{ quiz.description }}</td>
+                    <td>{{ quiz.score }}</td>
+                    <td>{{ quiz.metier?.nom }}</td>
+                    <td>{{ quiz.trancheage?.description }}</td>
+                    <td>
+                        <button class="btn btn-danger" (click)="supprimerQuiz(quiz.id!)">Supprimer</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <ng-template #noQuizzes>
+        <p>Aucun quiz disponible.</p>
+    </ng-template>
+
+    <!-- Modal pour ajouter un quiz -->
+    <div class="modal" tabindex="-1" role="dialog" [ngClass]="{'show': isModalOpen}" style="display: {{ isModalOpen ? 'block' : 'none' }};">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ajouter un Quiz</h5>
+                    <button type="button" class="close" (click)="closeModal()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form (ngSubmit)="ajouterQuiz()">
+                        <div class="form-group">
+                            <label for="titre">Titre</label>
+                            <input type="text" id="titre" [(ngModel)]="newQuiz.titre" name="titre" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea id="description" [(ngModel)]="newQuiz.description" name="description" class="form-control" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="score">Score</label>
+                            <input type="number" id="score" [(ngModel)]="newQuiz.score" name="score" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="metier">Sélectionnez un métier :</label>
+                            <select [(ngModel)]="selectedMetierId" id="metier" name="metier" class="form-control" required>
+                                <option *ngFor="let metier of metiers" [value]="metier.id">{{ metier.nom }}</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="trancheage">Sélectionnez un tranche Age :</label>
+                            <select [(ngModel)]="selectedTrancheageId" id="trancheage" name="trancheage" class="form-control" required>
+                                <option *ngFor="let trancheage of trancheages" [value]="trancheage.id">{{ trancheage.description }}</option>
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" (click)="closeModal()">Fermer</button>
+                            <button type="submit" class="btn btn-primary">Ajouter</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

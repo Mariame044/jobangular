@@ -39,7 +39,13 @@
                   <option *ngFor="let jeu of jeuxDeRole" [value]="jeu.id">{{jeu.nom}}</option>
                 </select>
               </div>
-  
+              <div *ngIf="newQuestion.typeQuestion === 'Quiz'">
+                <label for="quiz">Sélectionner un quiz:</label>
+                <select id="quiz" [(ngModel)]="selectedQuizId" name="quiz" required>
+                  <option *ngFor="let quiz of quiz" [value]="quiz.id">{{quiz.titre}}</option>
+                </select>
+              </div>
+             
               <h3>Ajouter une Réponse</h3>
               <div>
                 <label for="reponse">Réponse :</label>

@@ -1,1 +1,39 @@
-<p>dashboard works!</p>
+<div class="dashboard-container">
+    <div class="header">
+      <mat-form-field appearance="outline">
+        <mat-label>Date</mat-label>
+        <input matInput [matDatepicker]="picker" placeholder="Choisissez une date">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+  
+    <div class="cards">
+      <mat-card class="stat-card">
+        <mat-icon>video_library</mat-icon>
+        <p>178+</p>
+        <span>Les vidéos en rapport</span>
+      </mat-card>
+  
+      <mat-card class="stat-card">
+        <mat-icon>play_circle_filled</mat-icon>
+        <p>2000+</p>
+        <span>Les jeux à jouer</span>
+      </mat-card>
+  
+      <mat-card class="stat-card">
+        <mat-icon>replay</mat-icon>
+        <p>4900+</p>
+        <span>Les jeux rejoués</span>
+      </mat-card>
+    </div>
+  
+    <div class="chart-container">
+      <canvas id="lineChart"></canvas>
+    </div>
+  
+    <div class="favorites">
+      <h3>Les vidéos Favoris</h3>
+    </div>
+  </div>
+  

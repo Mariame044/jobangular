@@ -9,7 +9,7 @@
       class="search-input"
       placeholder="Rechercher une catégorie"
       [(ngModel)]="searchTerm"
-      (input)="loadInterview()"
+      (input)="loadInterviews()"
     />
     <button class="btn btn-primary" (click)="openModal('create')">Ajouter une Interview</button>
   </div>
@@ -26,6 +26,7 @@
                     <th>Numéro</th>
                     <th>Description</th>
                     <th>Métier</th>
+                    <th>Tranche Age</th>
                     <th>Date</th>
                     <th>Vidéo</th>
                     <th>Action</th>
@@ -36,6 +37,7 @@
                     <td>{{ i + 1 }}</td>
                     <td>{{ interview.description }}</td>
                     <td>{{ interview.metier?.nom }}</td>
+                    <td>{{ interview.trancheage?.description}}</td>
                     <td>{{ interview.date | date: 'dd/MM/yyyy' }}</td>
                     <td>
                         <video *ngIf="interview.url" [src]="'http://localhost:8080/' + interview.url" controls width="200"></video>
@@ -78,12 +80,27 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="description">Titre:</label>
+                    <textarea id="titre" [(ngModel)]="modalInterview.description" name="titre" required class="form-control"></textarea>
+                </div>
+
+                <div class="form-group">
                     <label for="metier">Métier:</label>
                     <select id="metier" [(ngModel)]="modalInterview.metier" name="metier" class="form-control" required>
                         <option value="" disabled selected>Choisissez un métier</option>
                         <option *ngFor="let metier of metiers" [ngValue]="metier">{{ metier.nom }}</option>
                     </select>
                 </div>
+
+                
+                <div class="form-group">
+                    <label for="trancheage">Tranche Age:</label>
+                    <select id="trancheage" [(ngModel)]="modalInterview.trancheage" name="trancheage" class="form-control" required>
+                      <option value="" disabled selected>Choisissez un tranche age</option>
+                      <option *ngFor="let trancheage of trancheages" [ngValue]="trancheage">{{ trancheage.description }}</option>
+                    </select>
+                  </div>
+          
 
                 <div class="form-group">
                     <label for="fichier">Fichier Vidéo:</label>

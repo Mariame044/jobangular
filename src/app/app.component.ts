@@ -19,10 +19,13 @@ import { Router, RouterModule } from '@angular/router';
 })
 export class AppComponent {
   isOpened: boolean = false;
+  
+
+
  
-  constructor(private router: Router,private authService: AuthenticationService) {
+  constructor(public router: Router,public authService: AuthenticationService) {
     this.logIN = this.authService.isLoggedIn();
-   
+  
   }
   toggleSidebar(): void {
     this.isOpened = !this.isOpened;
@@ -42,13 +45,15 @@ export class AppComponent {
   // Méthode pour mettre à jour l'état de connexion
   verifier(isLoggedIn: boolean): void {
     this.logIN = isLoggedIn;
+  
+    
   }
-   // Méthode de déconnexion
-   logout(): void {
+     // Méthode de déconnexion
+  logout(): void {
     this.authService.logout(); // Appel du service d'authentification pour se déconnecter
     this.logIN = false; // Mettre à jour l'état de connexion
+    this.router.navigate(['/login']); // Rediriger vers la page de connexion
   }
- 
    // Écouteur d'événements pour gérer la taille de l'écran
    @HostListener('window:resize', ['$event'])
    onResize(event: Event): void {

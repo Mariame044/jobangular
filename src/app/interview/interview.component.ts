@@ -5,55 +5,63 @@ import { MetierService } from '../services/metier.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
+import { Trancheage } from '../models/video';
+import { VideoService } from '../services/video.service';
 
 @Component({
   selector: 'app-interview',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './interview.component.html',
-  styleUrls: ['./interview.component.css'], // Correction ici
+  styleUrls: ['./interview.component.css'],
 })
 export class InterviewComponent implements OnInit {
   interviews: Interview[] = [];
-  newInterview: Interview = { id: 0, duree: '', description: '', date: new Date(), url: '', metier: null };
+  newInterview: Interview = { id: 0, duree: '', description: '',titre: '', date: new Date(), url: '', metier: null , trancheage: null};
   selectedFile: File | null = null;
   metiers: Metier[] = [];
+  trancheages: Trancheage[] = [];
   errorMessage: string = '';
   searchTerm: string = '';
-  isModalOpen: boolean = false; // Indique si le modal est ouvert
-  isEditing: boolean = false; // Indique si nous sommes en mode édition
-  modalInterview: Interview = { id: 0, duree: '', description: '', date: new Date(), url: '', metier: null };
-  private unsubscribe$ = new Subject<void>(); // Subject pour gérer les désabonnements
+  isModalOpen: boolean = false;
+  isEditing: boolean = false;
+  modalInterview: Interview = { id: 0, duree: '', description: '',titre: '', date: new Date(), url: '', metier: null , trancheage: null};
+  private unsubscribe$ = new Subject<void>();
+
   constructor(
     private interviewService: InterviewService,
-    private metierService: MetierService
+    private metierService: MetierService,
+    private videoService: VideoService
   ) {}
 
   ngOnInit(): void {
-    this.obtenirToutesLesInterviews(); // Correction ici
-    this.getAllMetiers(); 
-    this.loadInterview();// Récupérez les métiers lors de l'initialisation
+    this.loadInterviews();
+    this.getAllMetiers();
+    this.getAllTrancheage(); // Récupérez les métiers lors de l'initialisation
   }
-  loadInterview() {
+  getAllTrancheage(): void {
+    this.videoService.getAllTranchesAge().subscribe(
+      (data) => {
+        this.trancheages = data;
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des métiers', error);
+      }
+    );
+  }
+  loadInterviews() {
     this.interviewService.obtenirToutesLesInterview()
-      .pipe(takeUntil(this.unsubscribe$)) // Désabonnement lors de la destruction du composant
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe({
         next: (interviews) => {
           this.interviews = this.searchTerm ? interviews.filter(interview =>
             interview.description.toLowerCase().includes(this.searchTerm.toLowerCase())
-          ) : interviews; // Filtrer si un terme de recherche existe
+          ) : interviews;
         },
         error: () => {
-          this.errorMessage = 'Erreur lors du chargement des catégories';
+          this.errorMessage = 'Erreur lors du chargement des interviews';
         }
       });
-  }
-
-
-  obtenirToutesLesInterviews() { // Correction de la méthode
-    this.interviewService.obtenirToutesLesInterview().subscribe(interviews => {
-      this.interviews = interviews;
-    });
   }
 
   getAllMetiers(): void {
@@ -74,14 +82,14 @@ export class InterviewComponent implements OnInit {
     if (this.isEditing && interview) {
       this.modalInterview = { ...interview }; // Remplissez le modal avec les données de l'interview à éditer
     } else {
-      this.modalInterview = { id: 0, duree: '', description: '', date: new Date(), url: '', metier: null }; // Réinitialiser pour la création
+      this.modalInterview = { id: 0, duree: '', description: '',titre: '', date: new Date(), url: '', metier: null , trancheage: null}; // Réinitialiser pour la création
     }
   }
 
   closeModal() {
     this.isModalOpen = false;
-    this.modalInterview = { id: 0, duree: '', description: '', date: new Date(), url: '', metier: null }; // Réinitialiser le formulaire modal lors de la fermeture
-    this.selectedFile = null; // Réinitialiser le fichier sélectionné
+    this.modalInterview = { id: 0, duree: '', description: '',titre: '', date: new Date(), url: '', metier: null , trancheage: null};
+    this.selectedFile = null;
   }
 
   ajouterOuModifierInterview() {
@@ -91,24 +99,25 @@ export class InterviewComponent implements OnInit {
       formData.append('fichier', this.selectedFile as Blob);
     }
 
+    // Convertir la date au format ISO avant de l'ajouter au formData
     formData.append('duree', this.modalInterview.duree);
     formData.append('description', this.modalInterview.description);
-    formData.append('metierId', this.modalInterview.metier?.id.toString() || ''); // Convertir en chaîne
+    formData.append('date', this.modalInterview.date.toISOString()); // Ajoutez la date au format ISO
+    formData.append('metierId', this.modalInterview.metier?.id.toString() || '');
+    formData.append('trancheageId', this.modalInterview.trancheage?.id.toString() || ''); 
 
     if (this.isEditing) {
-      // Mise à jour d'une interview existante
       this.interviewService.updateInterview(this.modalInterview.id, formData).subscribe(updatedInterview => {
         const index = this.interviews.findIndex(i => i.id === updatedInterview.id);
         if (index !== -1) {
-          this.interviews[index] = updatedInterview; // Met à jour l'interview existante
+          this.interviews[index] = updatedInterview;
         }
-        this.closeModal(); // Ferme le modal
+        this.closeModal();
       });
     } else {
-      // Ajout d'une nouvelle interview
       this.interviewService.addInterview(formData).subscribe(newInterview => {
         this.interviews.push(newInterview);
-        this.closeModal(); // Ferme le modal après l'ajout
+        this.closeModal();
       });
     }
   }
@@ -117,13 +126,13 @@ export class InterviewComponent implements OnInit {
     this.selectedFile = event.target.files[0];
   }
 
-  supprimerInterview(id: number) { // Renommé pour correspondre à la logique
+  supprimerInterview(id: number) {
     this.interviewService.deleteInterview(id).subscribe(() => {
       this.interviews = this.interviews.filter(interview => interview.id !== id);
     });
   }
 
-  regarderInterview(id: number) { // Renommé pour correspondre à la logique
+  regarderInterview(id: number) {
     this.interviewService.regarderInterview(id).subscribe(interview => {
       console.log(interview);
     });

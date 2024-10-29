@@ -22,8 +22,9 @@
       <thead>
         <tr>
           <th>Numéro</th>
-      
+        
           <th>Description</th>
+          <th>Metier</th>
           <th>Metier</th>
           <th>Video</th>
           <th>Action</th>
@@ -34,6 +35,7 @@
           <td>{{ i + 1 }}</td>
           <td>{{video.description }}</td>
           <td>{{ video.metier?.nom }}</td>
+          <td>{{ video.trancheage?. description}}</td>
           <video *ngIf="video.url" [src]="'http://localhost:8080/' + video.url" controls width="200"></video>
           <td>
               <!-- <button class="btn btn-edit" (click)="openModal('edit', categorie)">
@@ -69,12 +71,24 @@
           <label for="description">Description:</label>
           <textarea id="description" [(ngModel)]="modalVideo.description" name="description" required class="form-control"></textarea>
         </div>
+        <div class="form-group">
+          <label for="description">Titre:</label>
+          <textarea id="titre" [(ngModel)]="modalVideo.titre" name="description" required class="form-control"></textarea>
+        </div>
 
         <div class="form-group">
           <label for="metier">Métier:</label>
           <select id="metier" [(ngModel)]="modalVideo.metier" name="metier" class="form-control" required>
             <option value="" disabled selected>Choisissez un métier</option>
             <option *ngFor="let metier of metiers" [ngValue]="metier">{{ metier.nom }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="trancheage">Tranche Age:</label>
+          <select id="trancheage" [(ngModel)]="modalVideo.trancheage" name="trancheage" class="form-control" required>
+            <option value="" disabled selected>Choisissez un tranche age</option>
+            <option *ngFor="let trancheage of trancheages" [ngValue]="trancheage">{{ trancheage.description }}</option>
           </select>
         </div>
 

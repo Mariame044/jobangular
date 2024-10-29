@@ -16,36 +16,41 @@
       <a routerLink="dashboard" class="list-group-item list-group-item-action">
         <i class="fas fa-tachometer-alt"></i> Dashboard
       </a>
-      <a routerLink="categorie" class="list-group-item list-group-item-action">
+     
+      <a routerLink="categorie" class="list-group-item list-group-item-action"  *ngIf="authService.isAdmin()">
         <i class="fas fa-th-list"></i> Catégorie
       </a>
-      <a routerLink="professionnel" class="list-group-item list-group-item-action">
+      <a routerLink="professionnel" class="list-group-item list-group-item-action"  *ngIf="authService.isAdmin()">
         <i class="fas fa-users"></i> Utilisateurs
       </a>
-      <a routerLink="metier" class="list-group-item list-group-item-action">
+      <a routerLink="metier" class="list-group-item list-group-item-action"  *ngIf="authService.isAdmin() || authService.isProfessional()">
         <i class="fas fa-tachometer-alt"></i> Metier
       </a>
-      <a routerLink="video" class="list-group-item list-group-item-action">
+      <a routerLink="video" class="list-group-item list-group-item-action" *ngIf="authService.isAdmin() || authService.isProfessional()">
         <i class="fas fa-video"></i> Vidéo
       </a>
-      <a routerLink="interview" class="list-group-item list-group-item-action">
+      <a routerLink="interview" class="list-group-item list-group-item-action" *ngIf="authService.isAdmin() || authService.isProfessional()">
         <i class="fas fa-file-alt"></i> Interview
       </a>
-      <a routerLink="jeux" class="list-group-item list-group-item-action">
+      <a routerLink="jeux" class="list-group-item list-group-item-action" *ngIf="authService.isAdmin() || authService.isProfessional()">
         <i class="fas fa-gamepad"></i> Jeu de rôle
       </a>
-      <a routerLink="/professionnel" class="list-group-item list-group-item-action">
+      <a routerLink="/professionnel" class="list-group-item list-group-item-action"*ngIf="authService.isAdmin()">
         <i class="fas fa-user"></i> Professionnel
       </a>
-      <a routerLink="profile" class="list-group-item list-group-item-action">
+      <a routerLink="profile" class="list-group-item list-group-item-action" *ngIf="authService.isAdmin() || authService.isProfessional()">
         <i class="fas fa-cog"></i> Profile
       </a>
-      <a routerLink="question" class="list-group-item list-group-item-action">
+      <a routerLink="question" class="list-group-item list-group-item-action" *ngIf="authService.isAdmin() || authService.isProfessional()">
         <i class="fas fa-cog"></i> Question
       </a>
-      <a routerLink="reponse" class="list-group-item list-group-item-action">
+      <a routerLink="reponse" class="list-group-item list-group-item-action" *ngIf="authService.isAdmin() || authService.isProfessional()">
         <i class="fas fa-cog"></i> reponse
       </a>
+      <a routerLink="quiz" class="list-group-item list-group-item-action" *ngIf="authService.isAdmin() || authService.isProfessional()">
+        <i class="fas fa-cog"></i> quiz
+      </a>
+    
     </div>
   </div>
 
@@ -61,7 +66,7 @@
       
 
       <div class="ml-auto d-flex align-items-center">
-        <button class="btn btn-link" >
+        <button class="btn btn-link" (click)="logout()">
           <i class="fas fa-sign-out-alt"></i>
         </button>
         <button class="btn btn-link">

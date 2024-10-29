@@ -19,7 +19,9 @@
                     <th>Nom</th>
                     <th>Description</th>
                     <th>Métier</th>
+                    <th>Tranche Age</th>
                     <th>Image</th>
+                    <th>Audio</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -29,8 +31,12 @@
                     <td>{{ jeuderole.nom }}</td>
                     <td>{{ jeuderole.description }}</td>
                     <td>{{ jeuderole.metier?.nom }}</td>
+                    <td>{{ jeuderole.trancheage?.description }}</td>
                     <td>
                         <img [src]="'http://localhost:8080/' + jeuderole.imageUrl" alt="{{ jeuderole.nom }}" width="200" />
+                    </td>
+                    <td>
+                        <audio [src]="'http://localhost:8080/' + jeuderole.audioUrl" controls width="200"></audio>
                     </td>
                     <td>
                         <button class="btn btn-delete" (click)="supprimerJeuDeRole(jeuderole.id!)">
@@ -79,8 +85,23 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="trancheage">Tranche Age:</label>
+                            <select id="trancheage" [(ngModel)]="newJeuderole.trancheage" name="trancheage" required class="form-control">
+                                <option value="" disabled selected>Choisissez un tranche age</option>
+                                <option *ngFor="let trancheage of trancheages " [ngValue]="trancheage">
+                                    {{ trancheage.description }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
                             <label for="file">Sélectionner une image:</label>
                             <input type="file" (change)="onImageChange($event)" class="form-control" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="file">Sélectionner une audio:</label>
+                            <input type="file" (change)="onAudioChange($event)" class="form-control" required />
                         </div>
 
                         <div *ngIf="loading" class="loading-message">
