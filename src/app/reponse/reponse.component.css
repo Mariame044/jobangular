@@ -2,30 +2,30 @@
 .modal {
     display: block;
     position: fixed;
-    z-index: 1000; /* Assure que le modal reste au-dessus des autres éléments */
+    z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.7); /* Fond plus sombre pour mieux mettre en valeur le modal */
-}
-
-/* Styles pour le contenu du modal */
-.modal-content {
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+  
+  /* Styles pour le contenu du modal */
+  .modal-content {
     background-color: #fff;
-    margin: 5% auto; /* Centrage du modal */
-    padding: 30px; /* Padding optimisé */
-    border-radius: 15px; /* Bordure arrondie pour un effet moderne */
-    width: 500px; /* Largeur du modal */
-    max-width: 90%; /* Responsive */
-    text-align: left; /* Alignement à gauche pour une meilleure lisibilité */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Ombre plus douce */
-    position: relative; /* Pour bien placer la croix de fermeture */
-}
-
-/* Style pour la croix de fermeture */
-.btn-close {
+    margin: 10% auto;
+    padding: 40px;
+    border-radius: 15px;
+    width: 500px;
+    max-width: 90%; /* S'assure que le modal reste responsive */
+    text-align: center;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    position: relative;
+  }
+  
+  /* Style pour la croix de fermeture */
+  .close {
     position: absolute;
     top: 15px;
     right: 20px;
@@ -34,192 +34,187 @@
     color: #aaa;
     cursor: pointer;
     transition: color 0.3s ease;
-}
-
-.btn-close:hover,
-.btn-close:focus {
-    color: #ff5e57; /* Couleur rouge au survol */
-}
-
-/* Styles pour les éléments du formulaire dans le modal */
-.form-container {
-    display: flex; /* Utilisation du flex pour le positionnement */
-    flex-direction: column; /* Alignement vertical des éléments */
-}
-
-.form-container label {
-    margin-bottom: 5px; /* Espacement réduit */
-    font-size: 1.1rem;
-    font-weight: 600; /* Poids de la police légèrement augmenté */
+  }
+  
+  .close:hover,
+  .close:focus {
     color: #333;
-}
-
-.form-container input {
+  }
+  
+  /* Styles pour les éléments du formulaire dans le modal */
+  .form-container label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .form-container input,
+  .form-container select,
+  .form-container textarea {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 20px; /* Espacement entre les champs */
+    padding: 12px;
+    margin-bottom: 20px;
     border: 1px solid #ccc;
-    border-radius: 5px; /* Bordure arrondie */
+    border-radius: 8px;
     font-size: 1rem;
     box-sizing: border-box;
     transition: border-color 0.3s ease;
-}
-
-.form-container input:focus {
-    border-color: #384D6C; /* Couleur plus prononcée au focus */
+  }
+  
+  .form-container input:focus,
+  .form-container select:focus,
+  .form-container textarea:focus {
+    border-color: #384D6C;
     outline: none;
-}
-
-/* Styles pour les boutons dans le modal */
-.btn-container {
-    display: flex; /* Flexbox pour aligner les boutons */
-    justify-content: space-between; /* Espacement entre les boutons */
-    margin-top: 20px; /* Espacement entre le formulaire et les boutons */
-}
-
-.btn {
-    padding: 10px 20px;
+  }
+  
+  /* Boutons dans le modal */
+  .btn {
+    display: inline-block;
+    padding: 12px 24px;
     font-size: 1rem;
     cursor: pointer;
     border: none;
     border-radius: 5px;
     transition: background-color 0.3s ease;
-}
-
-.btn-submit {
-    background-color: #384D6C; /* Couleur principale */
+  }
+  
+  .btn-primary {
+    background-color: #384D6C;
     color: white;
-}
-
-.btn-submit:hover {
-    background-color: #2c3e8b; /* Couleur au survol */
-}
-
-/* Responsivité pour les petits écrans */
-@media (max-width: 768px) {
-    .modal-content {
-        width: 90%;
-        padding: 20px;
-    }
-
-    .btn {
-        font-size: 0.9rem;
-        padding: 10px 15px;
-    }
-}
-
-/* Styles pour le container de la table */
-.categorie-container {
+  }
+  
+  .btn-primary:hover {
+    background-color: #2c3e8b;
+  }
+  
+  /* Styles pour le container de la table */
+  .categorie-container {
     background-color: #f9f9f9;
     padding: 25px;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Ombre douce */
-    margin-top: 50px; /* Descend la table */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-top: 50px;
     width: 100%;
-    max-width: 1100px; /* Légèrement plus large */
+    max-width: 1100px;
     margin-left: auto;
-    margin-right: auto; /* Centre le container */
-}
-
-/* Table styles */
-.category-table {
+    margin-right: auto;
+  }
+  
+  /* Table styles */
+  .category-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px; /* Plus d'espace au-dessus de la table */
-}
-
-.category-table th,
-.category-table td {
-    padding: 12px; /* Espacement dans les cellules */
+    margin-top: 20px;
+  }
+  
+  .category-table th,
+  .category-table td {
+    padding: 12px;
     text-align: left;
-    border-bottom: 1px solid #e0e0e0; /* Lignes plus douces */
-}
-
-.category-table th {
-    background-color: #384D6C; /* Couleur pour le contraste */
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .category-table th {
+    background-color: #384D6C;
     color: #fff;
     font-weight: bold;
-    text-transform: uppercase; /* Moderne */
-    letter-spacing: 0.05em; /* Espacement léger */
-}
-
-.category-table tr:nth-child(even) {
-    background-color: #f7f7f7; /* Lignes plus douces */
-}
-
-.category-table tr:hover {
-    background-color: #f1f1f1; /* Ajout d'un effet de survol */
-}
-
-/* Button styles */
-.btn-edit {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .category-table tr:nth-child(even) {
+    background-color: #f7f7f7;
+  }
+  
+  .category-table tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  /* Button styles */
+  .btn-edit {
     background-color: #384D6C;
     color: white;
     margin: 3%;
-}
-
-.btn-edit:hover {
+  }
+  
+  .btn-edit:hover {
     background-color: #2c3e8b;
-}
-
-.btn-delete {
+  }
+  
+  .btn-delete {
     background-color: #f44336;
     color: white;
-}
-
-.btn-delete:hover {
+  }
+  
+  .btn-delete:hover {
     background-color: #d32f2f;
-}
-
-/* Header section pour la recherche */
-.header-section {
+  }
+  
+  /* Header section for search */
+  .header-section {
     display: flex;
+    flex-wrap: wrap; /* Allow items to wrap on smaller screens */
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-}
-
-.search-input {
-    width: 300px;
+  }
+  
+  .search-input {
+    flex: 1;
+    max-width: 300px; /* Limit maximum width */
     padding: 8px;
     border-radius: 5px;
     border: 1px solid #ccc;
     font-size: 1rem;
     transition: border-color 0.3s ease;
-}
-
-.search-input:focus {
-    border-color: #384D6C; /* Border color en focus */
-}
-
-/* Message vide */
-.empty-message {
+    margin-right: 10px; /* Space between input and button */
+  }
+  
+  .search-input:focus {
+    border-color: #384D6C;
+  }
+  
+  /* Message empty */
+  .empty-message {
     color: #ff5722;
     margin-top: 30px;
     font-size: 1.2rem;
     font-weight: bold;
     text-align: center;
-}
-
-/* Media queries pour améliorer la responsivité */
-@media (max-width: 768px) {
-    .table-container {
-        padding: 15px;
+  }
+  
+  /* Media queries for improved responsiveness */
+  @media (max-width: 768px) {
+    .modal-content {
+      width: 90%;
+      padding: 20px; /* Reduced padding for smaller screens */
     }
-
+  
     .category-table th,
     .category-table td {
-        padding: 10px;
-        font-size: 0.9rem;
+      padding: 10px;
+      font-size: 0.9rem;
     }
-
+  
     .search-input {
-        width: 100%;
-        margin-bottom: 10px;
+      margin-bottom: 10px;
+      max-width: none; /* Allow full width on smaller screens */
     }
-
+  
     .btn {
-        font-size: 0.9rem;
-        padding: 8px 12px;
+      font-size: 0.9rem;
+      padding: 8px 12px;
     }
-}
+  
+    .table-container {
+      padding: 15px; /* Added padding for smaller screens */
+    }
+  
+    .category-table img {
+      width: 80px; /* Reduced image size for better fit */
+    }
+  }
+  

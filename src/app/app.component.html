@@ -4,8 +4,8 @@
 <div *ngIf="logIN">
 <div class="d-flex" id="wrapper">
   <!-- Sidebar -->
-  <div class="bg-light border-right" id="sidebar-wrapper" [ngClass]="{ 'active': isOpened }">
-    <div class="sidebar-heading text-center">
+  <div class="bg-light border-right" id="sidebar-wrapper" [ngClass]="{ 'active': isOpened }" style="background-color: #384D6C;">
+    <div class="sidebar-heading text-center" style="background-color: #384D6C;">
       <img src="assets/logo.png" alt="Job Adventure" class="img-fluid" style="max-width: 150px;">
       <!-- Bouton de fermeture visible uniquement lorsque la sidebar est ouverte -->
       <button class="close-btn" (click)="closeSidebar()" *ngIf="isOpened" aria-label="Close">
