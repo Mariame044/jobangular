@@ -58,7 +58,9 @@ export class ProfileComponent implements OnInit {
   onSubmit() {
     if (this.userForm.valid) {
       const { nom, password, confirmPassword } = this.userForm.value;
-      const image = this.userForm.get('image')?.value || undefined; // Assurez-vous que l'image est undefined si elle est null
+
+      // Si aucune image n'est fournie, mettre image à une chaîne vide
+      const image = this.userForm.get('image')?.value || ''; // Remplacer undefined par ''
 
       // Vérification que les mots de passe correspondent
       if (password && password !== confirmPassword) {
@@ -76,7 +78,7 @@ export class ProfileComponent implements OnInit {
         safeNom,
         safePassword,
         safeConfirmPassword,
-        image // image peut être undefined, géré dans le service
+        image // L'image est maintenant une chaîne vide si aucune image n'est fournie
       ).subscribe(
         (updatedUser: Users) => {
           console.log('Profil mis à jour avec succès', updatedUser);
@@ -93,10 +95,10 @@ export class ProfileComponent implements OnInit {
       console.error('Le formulaire n\'est pas valide');
     }
   }
+
   editNom() {
     this.userForm.patchValue({
       nom: this.currentUser.nom
     });
   }
-
 }

@@ -1,7 +1,6 @@
 <div class="categorie-container">
   <div class="header-section">
-    <h1>Gestion des Questions</h1>
-
+    <p>Liste des questions</p>
    
     <button type="button" class="btn btn-primary" (click)="openModal()">
       Ajouter une Question
@@ -16,7 +15,7 @@
         <tr>
           <th>ID</th>
           <th>Nom</th>
-          <th>Description</th>
+          <th>Point</th>
         
           <th>Actions</th>
         </tr>
@@ -26,11 +25,12 @@
         <tr *ngFor="let question of questions">
           <td>{{ question.id }}</td>
           <td>{{ question.texte }}</td>
-          <td>{{ question.reponse }}</td>
+        
           <td>{{ question.point }}</td>
-          <button (click)="supprimerQuestion(question.id!)" class="btn btn-delete">
-            Supprimer
+          <button class="btn btn-delete" (click)="supprimerQuestion(question.id!)">
+            <i class="fas fa-trash"></i> 
           </button>
+         
          
           
         </tr>

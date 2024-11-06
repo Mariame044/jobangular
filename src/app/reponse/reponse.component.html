@@ -1,86 +1,107 @@
-<div>
-    <h2>Réponses</h2>
-
-    <!-- Bouton pour ouvrir le modal -->
-    <button type="button" class="btn btn-primary" (click)="openModal()">
+<div class="categorie-container">
+    <div class="header-section">
+      <p>Liste des réponses</p>
+      <button type="button" class="btn btn-primary" (click)="openModal()">
         Ajouter une Réponse
-    </button>
-
+      </button>
+    </div>
+  
+    <div class="table-container">
+      <table class="category-table">
+        <thead>
+          <tr>
+            <th>Réponse possible</th>
+            <th>Réponse correcte</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let reponse of reponses">
+            <td>{{ reponse.reponsepossible.join(', ') }}</td>
+            <td>{{ reponse.correct }}</td>
+            <td>
+              <button class="btn btn-delete" (click)="supprimerReponse(reponse.id!)">
+                <i class="fas fa-trash"></i> 
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+  
+      <div *ngIf="reponses.length === 0" class="empty-message">
+        <p>Aucune réponse disponible.</p>
+      </div>
+    </div>
+  
     <!-- Modal pour ajouter une nouvelle réponse -->
     <div class="modal fade" id="ajouterReponseModal" tabindex="-1" aria-labelledby="ajouterReponseModalLabel" aria-hidden="true" 
          [ngClass]="{'show': isModalOpen}" 
          style="display: {{isModalOpen ? 'block' : 'none'}}">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="ajouterReponseModalLabel">Ajouter une Réponse</h5>
-                    <button type="button" class="btn-close" (click)="closeModal()" aria-label="Fermer"></button>
-                </div>
-                <div class="modal-body">
-                    <form (ngSubmit)="ajouterReponse()">
-                        <div class="mb-3">
-                            <label for="nom" class="form-label">Nom de la réponse :</label>
-                            <input
-                                type="text"
-                                [(ngModel)]="newReponse.libelle"
-                                id="nom"
-                                name="nom"
-                                placeholder="Nom de la réponse"
-                                required
-                                class="form-control"
-                            />
-                        </div>
-                        <div class="mb-3">
-                            <label for="reponsepossible" class="form-label">Nouvelle réponse possible :</label>
-                            <input
-                                type="text"
-                                [(ngModel)]="reponseText"
-                                placeholder="Nouvelle réponse possible"
-                                name="reponsepossibleTemp"
-                                class="form-control"
-                            />
-                            <button type="button" class="btn btn-secondary mt-2" (click)="ajouterReponsePossible()">
-                                Ajouter Réponse Possible
-                            </button>
-                        </div>
-
-                        <ul class="list-group mb-3">
-                            <li *ngFor="let reponse of newReponse.reponsepossible" class="list-group-item">
-                                {{ reponse }}
-                            </li>
-                        </ul>
-
-                        <div class="mb-3">
-                            <label for="correct" class="form-label" aria-required="true">Réponse correcte :</label>
-                            <input
-                                type="text"
-                                [(ngModel)]="newReponse.correct"
-                                id="correct"
-                                name="correct"
-                                placeholder="Réponse correcte"
-                                required
-                                class="form-control"
-                            />
-                            <small class="form-text text-muted">Entrez la réponse correcte exacte.</small>
-                        </div>
-                        <!-- Feedback for correct answer validation -->
-                        <div *ngIf="isCorrectResponseInvalid" class="alert alert-danger">
-                            La réponse correcte doit être l'une des réponses possibles.
-                        </div>
-
-                        <button type="submit" class="btn btn-success">Ajouter Réponse</button>
-                    </form>
-                </div>
-            </div>
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="ajouterReponseModalLabel">Ajouter une Réponse</h5>
+            <button type="button" class="btn-close" (click)="closeModal()" aria-label="Fermer"></button>
+          </div>
+          <div class="modal-body">
+            <form (ngSubmit)="ajouterReponse()">
+              <div class="form-group">
+                <label for="nom" class="form-label">Nom de la réponse :</label>
+                <input
+                  type="text"
+                  [(ngModel)]="newReponse.libelle"
+                  id="nom"
+                  name="nom"
+                  placeholder="Nom de la réponse"
+                  required
+                  class="form-control"
+                />
+              </div>
+  
+              <div class="form-group">
+                <label for="reponsepossible" class="form-label">Nouvelle réponse possible :</label>
+                <input
+                  type="text"
+                  [(ngModel)]="reponseText"
+                  placeholder="Nouvelle réponse possible"
+                  name="reponsepossibleTemp"
+                  class="form-control"
+                />
+                <button type="button" class="btn btn-secondary mt-2" (click)="ajouterReponsePossible()">
+                  Ajouter Réponse Possible
+                </button>
+              </div>
+  
+              <ul class="list-group mb-3">
+                <li *ngFor="let reponse of newReponse.reponsepossible" class="list-group-item">
+                  {{ reponse }}
+                </li>
+              </ul>
+  
+              <div class="form-group">
+                <label for="correct" class="form-label" aria-required="true">Réponse correcte :</label>
+                <input
+                  type="text"
+                  [(ngModel)]="newReponse.correct"
+                  id="correct"
+                  name="correct"
+                  placeholder="Réponse correcte"
+                  required
+                  class="form-control"
+                />
+                <small class="form-text text-muted">Entrez la réponse correcte exacte.</small>
+              </div>
+  
+              <!-- Feedback pour validation de la réponse correcte -->
+              <div *ngIf="isCorrectResponseInvalid" class="alert alert-danger">
+                La réponse correcte doit être l'une des réponses possibles.
+              </div>
+  
+              <button type="submit" class="btn btn-success">Ajouter Réponse</button>
+            </form>
+          </div>
         </div>
+      </div>
     </div>
-
-    <!-- Liste des réponses existantes -->
-    <h3>Liste des Réponses Existantes</h3>
-    <ul class="list-group">
-        <li *ngFor="let reponse of reponses" class="list-group-item d-flex justify-content-between align-items-center">
-            <span>{{ reponse.libelle }} - Réponses possibles: {{ reponse.reponsepossible.join(', ') }} - Correct: {{ reponse.correct }}</span>
-            <button class="btn btn-danger" (click)="supprimerReponse(reponse.id!)">Supprimer</button>
-        </li>
-    </ul>
-</div>
+  </div>
+  

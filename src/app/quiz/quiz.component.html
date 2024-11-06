@@ -1,50 +1,52 @@
-<div class="container mt-4">
-    <h2>Gestion des Quizzes</h2>
-
-    <!-- Bouton pour ouvrir le modal d'ajout -->
-    <button class="btn btn-primary mb-3" (click)="openModal()">Ajouter un Quiz</button>
+<div class="categorie-container mt-4">
+    <div class="header-section">
+        <p>Gestion des Quizzes</p>
+        <button class="btn btn-primary" (click)="openModal()">Ajouter un Quiz</button>
+    </div>
 
     <!-- Liste des quizzes -->
-    <div *ngIf="quizzes.length > 0; else noQuizzes">
-        <table class="table table-bordered">
+    <div *ngIf="quizzes.length > 0; else noQuizzes" class="table-container">
+        <table class="category-table">
             <thead>
                 <tr>
                     <th>Titre</th>
                     <th>Description</th>
                     <th>Score</th>
                     <th>Métier</th>
-                    <th>Tranche age</th>
+                    <th>Tranche d'âge</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let quiz of quizzes">
+                <tr *ngFor="let quiz of quizzes" class="list-group-item d-flex justify-content-between align-items-center">
                     <td>{{ quiz.titre }}</td>
                     <td>{{ quiz.description }}</td>
                     <td>{{ quiz.score }}</td>
                     <td>{{ quiz.metier?.nom }}</td>
                     <td>{{ quiz.trancheage?.description }}</td>
                     <td>
-                        <button class="btn btn-danger" (click)="supprimerQuiz(quiz.id!)">Supprimer</button>
+                        <button class="btn btn-danger" (click)="supprimerQuiz(quiz.id!)">
+                            <i class="fas fa-trash"></i> Supprimer
+                        </button>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
 
+    <!-- Message quand il n'y a pas de quiz -->
     <ng-template #noQuizzes>
         <p>Aucun quiz disponible.</p>
     </ng-template>
 
     <!-- Modal pour ajouter un quiz -->
-    <div class="modal" tabindex="-1" role="dialog" [ngClass]="{'show': isModalOpen}" style="display: {{ isModalOpen ? 'block' : 'none' }};">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" id="ajouterQuizModal" tabindex="-1" aria-labelledby="ajouterQuizModalLabel" aria-hidden="true" 
+         [ngClass]="{'show': isModalOpen}" style="display: {{ isModalOpen ? 'block' : 'none' }}">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Ajouter un Quiz</h5>
-                    <button type="button" class="close" (click)="closeModal()" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <h5 class="modal-title" id="ajouterQuizModalLabel">Ajouter un Quiz</h5>
+                    <button type="button" class="btn-close" (click)="closeModal()" aria-label="Fermer"></button>
                 </div>
                 <div class="modal-body">
                     <form (ngSubmit)="ajouterQuiz()">
@@ -68,7 +70,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="trancheage">Sélectionnez un tranche Age :</label>
+                            <label for="trancheage">Sélectionnez une tranche d'âge :</label>
                             <select [(ngModel)]="selectedTrancheageId" id="trancheage" name="trancheage" class="form-control" required>
                                 <option *ngFor="let trancheage of trancheages" [value]="trancheage.id">{{ trancheage.description }}</option>
                             </select>

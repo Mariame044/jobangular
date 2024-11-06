@@ -22,7 +22,7 @@ export class ProfileService {
 
   // Mettre à jour le profil de l'utilisateur
  // Mettre à jour le profil de l'utilisateur
-updateUserProfile(userId: number, fullName: string, password: string, confirmPassword: string, image?: File): Observable<Users> {
+updateUserProfile(userId: number, fullName: string, password: string, confirmPassword: string, p0: string, image?: File): Observable<Users> {
   const formData: FormData = new FormData();
   formData.append('fullName', fullName);
   
