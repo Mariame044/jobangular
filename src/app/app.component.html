@@ -2,85 +2,80 @@
 
 <!-- Affiche le composant sidebar et autres contenus si l'utilisateur est connecté -->
 <div *ngIf="logIN">
-<div class="d-flex" id="wrapper">
-  <!-- Sidebar -->
-  <div class="bg-light border-right" id="sidebar-wrapper" [ngClass]="{ 'active': isOpened }" style="background-color: #384D6C;">
-    <div class="sidebar-heading text-center" style="background-color: #384D6C;">
-      <img src="assets/logo.png" alt="Job Adventure" class="img-fluid" style="max-width: 150px;">
-      <!-- Bouton de fermeture visible uniquement lorsque la sidebar est ouverte -->
-      <button class="close-btn" (click)="closeSidebar()" *ngIf="isOpened" aria-label="Close">
-        <i class="fas fa-times"></i> <!-- Icône de fermeture -->
-      </button>
-    </div>
-    <div class="list-group list-group-flush">
-      <a routerLink="dashboard" class="list-group-item list-group-item-action">
-        <i class="fas fa-tachometer-alt"></i> Dashboard
-      </a>
-     
-      <a routerLink="categorie" class="list-group-item list-group-item-action"  *ngIf="authService.isAdmin()">
-        <i class="fas fa-th-list"></i> Catégorie
-      </a>
-      <a routerLink="professionnel" class="list-group-item list-group-item-action"  *ngIf="authService.isAdmin()">
-        <i class="fas fa-users"></i> Utilisateurs
-      </a>
-      <a routerLink="metier" class="list-group-item list-group-item-action"  *ngIf="authService.isAdmin() ">
-        <i class="fas fa-tachometer-alt"></i> Metier
-      </a>
-      <a routerLink="video" class="list-group-item list-group-item-action" *ngIf="authService.isAdmin() || authService.isProfessional()">
-        <i class="fas fa-video"></i> Vidéo
-      </a>
-      <a routerLink="interview" class="list-group-item list-group-item-action" *ngIf="authService.isAdmin() || authService.isProfessional()">
-        <i class="fas fa-file-alt"></i> Interview
-      </a>
-      <a routerLink="jeux" class="list-group-item list-group-item-action" *ngIf="authService.isAdmin() || authService.isProfessional()">
-        <i class="fas fa-gamepad"></i> Jeu de rôle
-      </a>
-      <a routerLink="/professionnel" class="list-group-item list-group-item-action"*ngIf="authService.isAdmin()">
-        <i class="fas fa-user"></i> Professionnel
-      </a>
-      <a routerLink="profile" class="list-group-item list-group-item-action" *ngIf="authService.isAdmin() || authService.isProfessional()">
-        <i class="fas fa-cog"></i> Profile
-      </a>
-      <a routerLink="question" class="list-group-item list-group-item-action" *ngIf="authService.isAdmin() || authService.isProfessional()">
-        <i class="fas fa-cog"></i> Question
-      </a>
-      <a routerLink="reponse" class="list-group-item list-group-item-action" *ngIf="authService.isAdmin() || authService.isProfessional()">
-        <i class="fas fa-cog"></i> reponse
-      </a>
-      <a routerLink="quiz" class="list-group-item list-group-item-action" *ngIf="authService.isAdmin() || authService.isProfessional()">
-        <i class="fas fa-cog"></i> quiz
-      </a>
-    
-    </div>
-  </div>
-
- <!-- Page Content -->
-<div id="page-content-wrapper" class="flex-grow-1">
-  <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom fixed-top">
-    <div class="container-fluid">
-      <button class="navbar-toggler" type="button" id="menu-toggle" (click)="toggleSidebar()">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <!-- Barre de recherche au milieu -->
-      
-
-      <div class="ml-auto d-flex align-items-center">
-        <button class="btn btn-link" (click)="logout()">
-          <i class="fas fa-sign-out-alt"></i>
-        </button>
-        <button class="btn btn-link">
-          <i class="fas fa-user-circle"></i>
+  <div class="d-flex" id="wrapper">
+    <!-- Sidebar -->
+    <div id="sidebar-wrapper" [ngClass]="{ 'active': isOpened }" style="background-color: #000000; color: white;">
+      <div class="sidebar-heading text-center" style="background-color: #000000; color: white;">
+        <img src="assets/logo.png" alt="Job Adventure" class="img-fluid" style="max-width: 150px;">
+        <!-- Bouton de fermeture visible uniquement lorsque la sidebar est ouverte -->
+        <button class="close-btn" (click)="closeSidebar()" *ngIf="isOpened" aria-label="Close" style="color: white;">
+          <i class="fas fa-times"></i> <!-- Icône de fermeture -->
         </button>
       </div>
+      <div class="list-group list-group-flush">
+        <a routerLink="dashboard" class="list-group-item list-group-item-action text-white" style="background-color: #000000;">
+          <i class="fas fa-tachometer-alt"></i> Dashboard
+        </a>
+        
+        <a routerLink="categorie" class="list-group-item list-group-item-action text-white" style="background-color: #000000;" *ngIf="authService.isAdmin()">
+          <i class="fas fa-th-list"></i> Catégorie
+        </a>
+        <a routerLink="professionnel" class="list-group-item list-group-item-action text-white" style="background-color: #000000;" *ngIf="authService.isAdmin()">
+          <i class="fas fa-users"></i> Utilisateurs
+        </a>
+        <a routerLink="metier" class="list-group-item list-group-item-action text-white" style="background-color: #000000;" *ngIf="authService.isAdmin()">
+          <i class="fas fa-tachometer-alt"></i> Metier
+        </a>
+        <a routerLink="video" class="list-group-item list-group-item-action text-white" style="background-color: #000000;" *ngIf="authService.isAdmin() || authService.isProfessional()">
+          <i class="fas fa-video"></i> Vidéo
+        </a>
+        <a routerLink="interview" class="list-group-item list-group-item-action text-white" style="background-color: #000000;" *ngIf="authService.isAdmin() || authService.isProfessional()">
+          <i class="fas fa-file-alt"></i> Interview
+        </a>
+        <a routerLink="jeux" class="list-group-item list-group-item-action text-white" style="background-color: #000000;" *ngIf="authService.isAdmin() || authService.isProfessional()">
+          <i class="fas fa-gamepad"></i> Jeu de rôle
+        </a>
+        <a routerLink="/professionnel" class="list-group-item list-group-item-action text-white" style="background-color: #000000;" *ngIf="authService.isAdmin()">
+          <i class="fas fa-user"></i> Professionnel
+        </a>
+        <a routerLink="profile" class="list-group-item list-group-item-action text-white" style="background-color: #000000;" *ngIf="authService.isAdmin() || authService.isProfessional()">
+          <i class="fas fa-cog"></i> Profile
+        </a>
+        <a routerLink="question" class="list-group-item list-group-item-action text-white" style="background-color: #000000;" *ngIf="authService.isAdmin() || authService.isProfessional()">
+          <i class="fas fa-cog"></i> Question
+        </a>
+        <a routerLink="reponse" class="list-group-item list-group-item-action text-white" style="background-color: #000000;" *ngIf="authService.isAdmin() || authService.isProfessional()">
+          <i class="fas fa-cog"></i> Réponse
+        </a>
+        <a routerLink="quiz" class="list-group-item list-group-item-action text-white" style="background-color: #000000;" *ngIf="authService.isAdmin() || authService.isProfessional()">
+          <i class="fas fa-cog"></i> Quiz
+        </a>
+      </div>
     </div>
-  </nav>
 
-  <div class="container-fluid">
-    <router-outlet></router-outlet>
-    <!-- Main content goes here -->
+    <!-- Page Content -->
+    <div id="page-content-wrapper" class="flex-grow-1">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom fixed-top">
+        <div class="container-fluid">
+          <button class="navbar-toggler" type="button" id="menu-toggle" (click)="toggleSidebar()">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          
+          <div class="ml-auto d-flex align-items-center">
+            <button class="btn btn-link" (click)="logout()">
+              <i class="fas fa-sign-out-alt"></i>
+            </button>
+            <button class="btn btn-link">
+              <i class="fas fa-user-circle"></i>
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      <div class="container-fluid">
+        <router-outlet></router-outlet>
+        <!-- Main content goes here -->
+      </div>
+    </div>
   </div>
-</div>
-
-</div>
 </div>

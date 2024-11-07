@@ -1,3 +1,7 @@
+.bg-blue {
+  background-color: #384D6C;
+  color: #ffffff; /* texte en blanc pour un meilleur contraste */
+}
 /* Styles de la sidebar */
 #sidebar-wrapper {
   width: 250px; /* Largeur de la sidebar */
